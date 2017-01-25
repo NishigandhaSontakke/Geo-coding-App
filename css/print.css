@@ -1,0 +1,7 @@
+  .north{position: absolute;
+    top: 5%;
+    right: 2%;
+    width: 40px;}  
+
+
+ .bg{box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);}

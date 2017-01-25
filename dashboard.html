@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Creative Data Maps</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
+    
+    <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css" />
+    <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="css/leaflet-measure.css">
+    <!-- Custom CSS -->
+    <link href="css/simple-sidebar.css" rel="stylesheet">
+    <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+    <!-- Load Esri Leaflet from CDN -->
+    <script src="https://unpkg.com/esri-leaflet@2.0.7"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+<script src="https://rawgit.com/Leaflet/Leaflet.heat/gh-pages/dist/leaflet-heat.js"></script>
+<script src="js/leaflet-measure.js"></script>
+<!-- Load Heatmap Feature Layer from CDN -->
+<script src="https://unpkg.com/esri-leaflet-heatmap@2.0.0"></script>
+
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+        <div class="col-md-12 col-lg-12 col-sm-12">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                     <img src="img/planet-earth.png" style="width: 22px;">Creative Data Maps</img>
+                    </a>
+
+                </li>
+                <li class="sidebarmenu">
+                    <a href="home.html">Home</a>
+                </li>
+                <li class="sidebarmenu">
+                    <a href="#">Dashboard</a>
+                </li>
+                <li class="sidebarmenu">
+                    <a href="dataTable.html">Datatable</a>
+                </li>
+                <li class="sidebarmenu">
+                    <a href="#">Saved Maps</a>
+                </li>
+                <li class="sidebarmenu">
+                    <a href="#">Profile</a>
+                </li>
+                
+            </ul>
+            </div>
+            <div class="col-md-12 graphdiv">
+            <ul class="chartdia">
+              <li class="chart" data-percent="75"><span>75<b>%</b></span>Used</li>
+              <a href="#" class="btn btn-default upgradebtn">Upgrade</a>
+            </ul>
+            
+            </div>
+
+            <div class="col-md-12">
+            <hr/>
+            <ul class="sidebar-nav" style="">
+                <li class="sidebarmenu">
+                    <a href="#">About</a>
+                </li>
+                <li class="sidebarmenu">
+                    <a href="#">Services</a>
+                </li>
+                <li class="sidebarmenu">
+                    <a href="#">Contact</a>
+                </li>
+            </ul>
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid" style="padding:0;">
+        <div class="col-md-9 col-lg-9 col-sm-9">
+           <a href="#menu-toggle" class="menubutton" title="menu" id="menu-toggle">  
+           <m-button shape="round" ripple role="secondary" size="big" icon="menu">
+              <icon>
+                <line></line>
+                <line></line>
+                <line></line>
+              </icon>
+              <ripples></ripples>
+            </m-button>
+            </a>
+            <a href="#addmarker" data-backdrop="false" role="dialog" data-toggle="modal" class="button">
+              <img class="img-responsive addmaker" src="./img/add marker.png" data-toggle="tooltip" data-placement="right" title="Add Marker"/>  
+            </a>
+            <a href="" class="button">
+              <img class="img-responsive dline" src="./img/line.png" data-toggle="tooltip" data-placement="right" title="Draw Line"/>  
+            </a>
+            <!-- <a href="" class="button">
+              <img class="img-responsive ruler" src="./img/ruler.png" data-toggle="tooltip" data-placement="right" title="Measure Distance"/>  
+            </a> -->
+            <a href="" class="button">
+              <img class="img-responsive pan" src="./img/pan.png"  data-toggle="tooltip" data-placement="right" title="Pan"/>  
+            </a>
+            <a href="" class="button">
+              <img class="img-responsive refresh" src="./img/reload.png"  data-toggle="tooltip" data-placement="right" title="Reset"/>  
+            </a>
+            <!-- <a href="#menu-toggle" class="btn btn-default menubutton" id="menu-toggle">Toggle Menu</a> -->
+                <div class="row">
+                 <form class="search-container">
+                    <input type="text" id="search-bar" placeholder="Search">
+                    <a href="#"><img class="search-icon" src="http://www.endlessicons.com/wp-content/uploads/2012/12/search-icon.png"></a>
+                </form>
+                    <div id="mapid">
+                    </div>
+                    <div id="basemaps-wrapper" class="leaflet-bar">
+                      <select name="basemaps" id="basemaps" onChange="changeBasemap(basemaps)">
+                        <option value="">Select Basemap</option>
+                        <option value="Topographic">Topographic</option>
+                        <option value="Streets">Streets</option>
+                        <option value="NationalGeographic">National Geographic</option>
+                        <option value="Oceans">Oceans</option>
+                        <option value="Gray">Gray</option>
+                        <option value="DarkGray">Dark Gray</option>
+                        <option value="Imagery">Imagery</option>
+                        <option value="ShadedRelief">Shaded Relief</option>
+                      </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-lg-3 col-sm-3 rightbar">
+            <div class="col-md-12 col-lg-12 col-sm-12 nameDiv">
+                <h3>Jon Doe</h3>
+                <p class="date">14 Jan 2017</p>
+            </div>
+            <div class="col-md-12 col-lg-12 col-sm-12" style="padding: 0;">
+            <div class="col-md-4 col-lg-4 col-sm-4" style="padding: 10px 0 0px 10px;">
+            <p style="font-size: 12px; color:#555;"><i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>Map Title</p>
+            </div>
+            <div class="col-md-8 col-sm-8 col-lg-8">
+                 <div class="social-icons">
+                    <ul>
+                      <li><button type="button" id="edit" class="btn buttonhori" data-toggle="tooltip" data-placement="bottom" title="Edit"><img src="./img/writer.png"/></button></li>
+                      <li data-toggle="tooltip" data-placement="bottom" title="Add New File"><button type="button" class="btn buttonhori" data-toggle="modal" data-target=".addnewfile"><img src="./img/new-file.png"/></button></li>
+                      <li data-toggle="tooltip" data-placement="bottom" title="Select File"><button type="button" class="btn buttonhori" data-toggle="modal" data-target=".openfolder"><img src="./img/open-folder.png"/></button>
+                      </li>
+                      <li data-toggle="tooltip" data-placement="bottom" title="Export Data"><button type="button" class="btn buttonhori" data-toggle="modal" data-target=".exportdata"><img src="./img/export.png"/></button></li>
+                      <li data-toggle="tooltip" data-placement="bottom" title="Print"><button type="button" class="btn buttonhori" data-toggle="modal" data-target=".printmap"><img src="./img/printer.png"/></button></li>
+                    </ul>
+                  </div>   
+            </div>
+            </div>
+            <!--2nd map menu-->
+            <div class="col-md-12 col-lg-12 col-sm-12 menuback">
+                <nav id="main-menu">
+                     <ul class="nav-bar">
+                          <li class="nav-button-home"><a href="#"><img class="menuimg1" src="./img/layers.png"/>Add Layer |</a></li>
+                          <li class="nav-button-services"><a href="#"><img class="menuimg2" src="./img/preview.png"/>Preview |</a></li>
+                          <li class="nav-button-products"><a href="#"><img class="menuimg3" src="./img/share.png"/>Share</a></li>
+                     </ul>
+                </nav>
+            </div>
+            <div class="col-md-12">
+            <div id='demo'>
+            <h5>Layer List</h5>
+              <ul class='tree-menu'>
+                <li>
+                  <input checked='true' id='demo1-1' name='demo1-1' type='checkbox'>
+                  <label for='demo1-1'>item 1</label>
+                  <ul>
+                    <li>
+                      <a href='#'>item 1-1</a>
+                    </li>
+                    <li>
+                      <input checked='true' id='demo1-1-2' name='demo1-1-2' type='checkbox'>
+                      <label for='demo1-1-2'>item 1-2</label>
+                      <ul>
+                        <li>
+                          <a href='#'>item 1-2-1</a>
+                        </li>
+                        <li>
+                          <a href='#'>item 1-2-2</a>
+                        </li>
+                        <li>
+                          <a href='#'>item 1-2-3</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href='#'>item 1-3</a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <input checked='true' id='demo1-2' name='demo1-2' type='checkbox'>
+                  <label for='demo1-2'>item 2</label>
+                  <ul>
+                    <li>
+                      <a href='#'>item 2-1</a>
+                    </li>
+                    <li>
+                      <a href='#'>item 2-2</a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a href='#'>item 3</a>
+                </li>
+              </ul>
+            </div>
+            </div><!--tree end-->
+            <div class="col-md-12 menuback">
+            <a href="#" class="btn btn-default importdata">Import Data</a>
+            <a href="#" class="btn btn-default savedata">Save</a>
+            </div>
+            </div><!--container end-->
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+<div id="myForm" class="hide">
+    <form action="/echo/html/" id="popForm" method="get">
+        <div>
+            <label for="name">Map Title:</label>
+            <input type="text" name="name" id="name" class="form-control input-md">
+            <label for="about">Description:</label>
+            <textarea rows="3" name="about" id="about" class="form-control input-md"></textarea>
+            <br/>
+            <button type="button" class="btn btn-primary bluebtn" data-loading-text="Sending info.."><em class="icon-ok"></em> Save</button>
+        </div>
+    </form>
+</div>
+
+<div class="modal fade exportdata " tabindex="-1" role="dialog" aria-labelledby="">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content" style="border-radius: 0px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Export Map</h4>
+      </div>
+      <div class="modal-body">
+       <form>
+            <div class="">
+            <div class="">
+                <p>Select Area</p>
+                <div class="select">
+                  <select>
+                    <option>Export entire map</option>
+                    <option>Export selected area</option>
+                  </select>
+                  <div class="select__arrow"></div>
+                </div>
+            </div>
+                <p></p>
+                <label class="control control--checkbox">Export to KML
+                  <input type="checkbox" checked="checked"/>
+                  <div class="control__indicator"></div>
+                </label>
+                <label class="control control--checkbox">Export to .jpg
+                  <input type="checkbox"/>
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+            <button type="button" class="btn btn-primary bluebtn">Export</button> 
+            <button type="button" class="btn btn-default btnwhite" data-dismiss="modal">Cancel</button>
+        </form>
+      </div>
+    </div><!-- /.modal-content -->
+  </div>
+</div>
+
+<div class="modal fade printmap" tabindex="-1" role="dialog" aria-labelledby="">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content" style="border-radius: 0px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Print Map</h4>
+      </div>
+      <div class="modal-body">
+       <form>
+            <div class="">
+            <div class="">
+                <p>Paper Size</p>
+                <div class="select">
+                  <select>
+                    <option>Letter (8.5" * 11")</option>
+                    <option>Legal  (8.5" * 14")</option>
+                    <option>Tabloid (11" * 17")</option>
+                    <option>Statement  (5.5" * 8.5")</option>
+                    <option>A3 (29.7cm * 42.0cm)</option>
+                    <option>A4  (21.0cm * 42.0cm)</option>
+                    <option>A5 (14.8cm * 21.0cm)</option>
+                    <option>B4  (25.0cm * 35.3cm)</option>
+                    <option>B5  (17.6cm * 25.0cm)</option>
+                  </select>
+                  <div class="select__arrow"></div>
+                </div>
+            </div>
+                 <div class="">
+                 <p>Orientation</p>
+                    <label class="control control--radio">Portrait
+                      <input type="radio" name="radio" checked="checked"/>
+                      <div class="control__indicator"></div>
+                    </label>
+                    <label class="control control--radio">Landscape
+                      <input type="radio" name="radio"/>
+                      <div class="control__indicator"></div>
+                    </label>
+                  </div>
+                  <div class="">
+                 <p>Output Type</p>
+                    <label class="control control--radio">PDF
+                      <input type="radio" name="radio" checked="checked"/>
+                      <div class="control__indicator"></div>
+                    </label>
+                    <label class="control control--radio">Image
+                      <input type="radio" name="radio"/>
+                      <div class="control__indicator"></div>
+                    </label>
+                  </div>
+              </div>
+            <a href="print.html" traget="_blank" type="button" class="btn btn-primary bluebtn">Print</a> 
+            <button type="button" class="btn btn-default btnwhite" data-dismiss="modal">Cancel</button>
+        </form>
+      </div>
+    </div><!-- /.modal-content -->
+  </div>
+</div>
+
+<div class="modal fade openfolder " tabindex="-1" role="dialog" aria-labelledby="">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content" style="border-radius: 0px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Select File</h4>
+      </div>
+      <div class="modal-body">
+          <form action='' method=''>
+            <label class='upload-zone'>
+              <i>&nbsp;</i>
+              <input type='file' name='files'/>
+            </label>
+            <div class="">
+            <button type="button" class="btn btn-default btnwhite" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary bluebtn">Add to Map</button>
+            </div>
+          </form>
+      </div>
+    </div><!-- /.modal-content -->
+  </div>
+</div>
+
+<div id="addmarker" class="modal fade">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                 <p class="modal-title">Add Marker</p>
+            </div>
+            <div class="modal-body">
+            <div class="addmark">
+                <form id="form" class="topBefore">
+                    <div class="row">
+                    <div class="col-md-1 col-sm-1 col-xs-1">
+                    <a class="btn" style="padding: 6px 2px;"><img src="./img/focus.png" style="width:32px;"/></a>
+                    </div>
+                    <div class="col-md-11 col-sm-11 col-xs-11">
+                    <input id="location" type="text" style="width:200px;border: solid 1px #b3aca7;" placeholder="Current Location">
+                    </div>
+                    </div>
+                    <p>OR</p>
+                    <input id="lat" type="text" placeholder="Latitude">
+                    <input id="lng" type="text" placeholder="Longitude" style="border: solid 1px #b3aca7;">
+                    <br/><p>OR</p>
+                    <a class="btn" style="padding: 6px 2px;"><img src="./img/marker.png" style=""/>Click on map to add marker</a>
+                    <br/> <br/>
+                    <textarea id="popupcontent" type="text" placeholder="Marker Description"></textarea>
+                    <input id="submit" type="submit" value="Add">
+
+                </form>
+              </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btnwhite" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary bluebtn">Save changes</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+    <!-- jQuery -->
+     <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js'></script>
+     <script
+  src="http://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+  crossorigin="anonymous"></script>
+
+    
+    <script type='text/javascript' src='http://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js'></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- <script src="js/leaflet-src.js"></script> -->
+    <script type="text/javascript" src="js/leaflet.ajax.js"></script>
+    <script src="js/spin.js"></script>
+    <script src="js/leaflet.spin.js"></script>
+    <script src="js/default.js"></script>
+    <script type='text/javascript' src='js/markers.js'></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+
+</body>
+
+</html>
